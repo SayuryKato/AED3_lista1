@@ -7,8 +7,8 @@
 
 struct no_linha		
 {
-	int valor_linha;					
-	struct no_linha *proxima_linha;		
+	int valor_linha;				//Criacao e insercao exatamente como passdo no quadro, somente remocao que fizemos diferente.	
+	struct no_linha *proxima_linha;		// Explicacao dela na funcao da mesma.
 	struct no_coluna *primeira_coluna;
 };
 
@@ -164,39 +164,39 @@ void mostra_matriz_esparsa(struct matriz_esparsa *m)
 }
 
 
-void rastreio(struct matriz_esparsa *m, int linha, int coluna)
+void rastreio_remove(struct matriz_esparsa *m, int linha, int coluna)		// chamada rastreio_remove vai procurar a linha e coluna e depois remover.
 {
-	struct no_linha *aux;
-	struct no_coluna *pc, *hold, *ant;
+	struct no_linha *aux;					// auxiliar para procurar a linha.
+	struct no_coluna *pc, *hold, *ant;		// auxiliar para procurar a coluna, armazenar a coluna anterior e coluna da proxima. 
 	int chave = 0, chave_linha=0;
-	aux=m->primeira;
-	while(aux!=NULL)
+	aux=m->primeira;		
+	while(aux!=NULL)			// loop principal, para  continuar enquanto o campo da linha que o aux estiver apontando for diferente de nulo.
 	{
-		if(aux->valor_linha==linha)
+		if(aux->valor_linha==linha)		// Condicao para quando ele encontrar a linha informada pelo usuario.
 		{
 			//printf("achei a linha!");
 			chave_linha=1;
-			pc=aux->primeira_coluna;
-			while (pc!=NULL){
-				if (pc->posicao_coluna==coluna){
+			pc=aux->primeira_coluna;	
+			while (pc!=NULL){		// loop principal da coluna.
+				if (pc->posicao_coluna==coluna){		// Condição para quando encontrar a coluna informada pelo usuario.
 					chave = 1;						//printf("Achei a coluna! %d\n", pc->valor_coluna);
-					hold=pc->proxima_coluna;		//printf("HOLD: %d\n", hold->valor_coluna);
-					pc->proxima_coluna=NULL;
-					ant->proxima_coluna=hold;
+					hold=pc->proxima_coluna;		//printf("HOLD: %d\n", hold->valor_coluna); / hold vai segurar a proxima coluna.
+					pc->proxima_coluna=NULL;			// pc vai fazer a coluna que eu quero remover apontar para nulo.
+					ant->proxima_coluna=hold;			// ant vai apontar para a coluna que hold estava segurando.
 					
 					
 				}
-				ant=pc;				//printf("%d\n", ant->posicao_coluna);
-				pc=pc->proxima_coluna;
+				ant=pc;	  //printf("%d\n", ant->posicao_coluna); / ant vai sempre recer a coluna que o pc está apontando, para quando pc encontrar a coluna do 
+				pc=pc->proxima_coluna; // ...usuario, ele vai esta guardando a anterior. / Aqui é o pc andando mais uma coluna enquanto ele nao acha a informada.
 			}
 			if (pc==NULL && chave==0){
-				printf("valor ja vazio!");
+				printf("valor ja vazio!");	// Se achar a linha, mas não a coluna, significa que ele esta vazia (igual a 0). 
 			}
 		}
-		aux=aux->proxima_linha;
+		aux=aux->proxima_linha; // aux apontando para a proxima linha enqaunto ele nao acha a informda.
 	}
 	if (chave_linha==0){
-		printf("Linha nao encontrada!");
+		printf("Linha nao encontrada! Usuario informou valor alem do limite da linha"); // Condicao para quando ele nao encontra a linha. 
 	}
 }
 
@@ -214,7 +214,7 @@ int i, j;
 		{0, 0, 0, 0},
 		{-30, 0, -60, 5}
 	};
-	printf("Matriz de entrada\n");
+	printf("      Matriz de entrada\n");
 	for(i=0; i<numero_linha; i++)
 	{
 		for(j=0; j<numero_coluna; j++)
@@ -241,12 +241,13 @@ int i, j;
 		}
 	}
 
-	printf("\nMatriz esparsa\n");
+	printf("\n      Matriz esparsa\n");
 	mostra_matriz_esparsa(&m);
 	
-	printf("\nRemove Matriz Esparsa\n");
-	rastreio(&m,linha_proc, coluna_proc);
-	printf("\nMatriz esparsa\n");
+	printf("\n      Remove Matriz Esparsa\n");
+	printf("Remove linha: %d, coluna: %d",linha_proc, coluna_proc);
+	rastreio_remove(&m,linha_proc, coluna_proc);
+	printf("\n      Matriz esparsa\n");
 	mostra_matriz_esparsa(&m);
 
 
